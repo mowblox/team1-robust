@@ -25,12 +25,15 @@
 
 /* HeroSection */
 .mainhero-container{
-  background-image: url('../public/assets/hero-img.png');
+  /* background-image: url('../public/assets/hero-img.png'); */
   width: 100%;
   height: 100vh;
-  background-size: cover;
+  /* background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
+  background-repeat: no-repeat; */
+  background-color: #D9AFD9;
+background-image: linear-gradient(0deg, #D9AFD9 0%, #97D9E1 100%);
+
 
 }
 
@@ -46,14 +49,18 @@
   background-size: cover;
   background-repeat: no-repeat;
 
+
 }
 
 /* Hero Section */
 .hero-grp{
-  background-image: url('../public/assets/subhero-img.png');
-  height: 70vh;
-  background-position: center;
+  /* background-image: url('../public/assets/subhero-img.png'); */
+  height: 100vh;
+  /* background-position: center;
   background-size: cover;
-  background-repeat: no-repeat;
+  background-repeat: no-repeat; */
   opacity: 0.9;
+  background-color: #D9AFD9;
+  background-image: linear-gradient(0deg, #D9AFD9 0%, #97D9E1 100%);
+
 }

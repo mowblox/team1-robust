@@ -10,10 +10,10 @@ const Home = () => {
     <div>
         {/* <Navbar /> */}
         <MainHero />
-        <AddOForm />
-        <TeamCard />
+        {/* <AddOForm /> */}
+        {/* <TeamCard /> */}
         <HomeStep />
-        <Footer />
+        {/* <Footer /> */}
     </div>
   )
 }
