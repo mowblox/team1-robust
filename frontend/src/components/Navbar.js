@@ -6,23 +6,23 @@ import {
     FaMoon,
     FaSun
 } from 'react-icons/fa'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import '../App.css'
 
 const Navbar = () => {
     const NavRef = useRef()
-    const {theme, systemThemes, setThemes} = useTheme()
+    const {systemTheme, theme, setTheme} = useTheme()
 
     const darkMode = () => {
-        const mode = theme === 'system' ? systemThemes : theme
+        const mode = theme === 'system' ? systemTheme : theme
 
         if(mode === 'dark') {
             return (
-                <FaMoon color='red' onClick={() => setThemes('dark')}/>
+                <FaMoon color='red' onClick={() => setTheme('light')}/>
             )
         }else {
             return (
-                <FaSun color='red' onClick={() => setThemes('dark')}/>
+                <FaSun color='red' onClick={() => setTheme('dark')}/>
             )
         }
     }
@@ -31,8 +31,20 @@ const Navbar = () => {
         NavRef.current.classList.toggle('switch')
     }
 
+    // Change Navbar color when scrolling 
+    const [color, setColor] = useState(false)
+    const changeColor = () => {
+        if(window.scrollY >= 90) {
+            setColor(true)
+        }else{
+            setColor(false)
+        }
+    }
+
+    window.addEventListener('scroll', changeColor);
+
   return (
-    <div className='flex justify-between align-middle px-4 py-2 '>
+    <div className='flex justify-between align-middle px-4 py-2' style={{backgroundColor: color ? 'black' : ''}}>
         <Link to='/' className='font-bold'>Logo</Link>
         <nav className='flex' ref={NavRef}>
             <div>{darkMode()}</div>

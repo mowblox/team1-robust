@@ -15,25 +15,25 @@ import Gallery from './pages/Gallery';
 
 
 function App() {
-  // const [themes, systemThemes, setThemes] = useTheme()
+  const {theme, systemTheme, setTheme} = useTheme()
 
-  // const darkMode = () => {
-  //   const mode = themes === 'system' ? systemThemes : themes;
+  const darkMode = () => {
+    const mode = theme === 'system' ? systemTheme : theme;
 
-  //   if(mode === 'dark') {
-  //     return(
-  //       <FaMoon color='red' on/>
-  //     )
-  //   }else {
-  //     return(
-  //       <FaSun color='red' />
-  //     )
-  //   }
-  // }
+    if(mode === 'dark') {
+      return(
+        <FaMoon role='button' color='red' onClick={() => setTheme('light')}/>
+      )
+    }else {
+      return(
+        <FaSun role='button' color='red' onClick={() => setTheme('dark')} />
+      )
+    }
+  }
 
   return (
     <BrowserRouter>
-      {/* <div style={{position: 'absolute', top: '30px', right: '10px', zIndex: '10'}}>{darkMode}</div> */}
+      <div style={{position: 'fixed', top: '50%', right: '5%', zIndex: '10'}}>{darkMode()}</div>
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/about' element={<About />} />
