@@ -42,7 +42,7 @@ const AddOForm = () => {
             // Get Signer
             const signer = await provider.getSigner();
             // Call Contract Method
-            await donationContract.connect(signer).addOrganisation(name, address);
+            await donationContract.connect(signer).makeDonation(name, address);
             // console.log({name, address})
             setName('')
             setAddress('')

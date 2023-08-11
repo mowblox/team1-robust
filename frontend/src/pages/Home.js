@@ -12,7 +12,7 @@ const Home = () => {
         <MainHero />
         {/* <AddOForm /> */}
         {/* <TeamCard /> */}
-        <HomeStep />
+        {/* <HomeStep /> */}
         {/* <Footer /> */}
     </div>
   )

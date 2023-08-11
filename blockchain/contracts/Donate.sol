@@ -4,33 +4,25 @@ pragma solidity 0.8.19;
 contract Donate {
 // Organisations details
     struct Organisation {
-        bytes32 id;
         string name;
         address addr;
+        uint amount ;
     }
+     event WithdrawalMade(
+        address indexed recipient,
+        uint amount
+    );  
+
 
 // Donors details
     struct Donors {
-        bytes32 id;
-        bytes32 orgId;
-        string name;
-        address addr;
-    }
-
-// Withdrawal details
-     struct Withdrawals {
-        bytes32 id;
-        bytes32 orgId;
         address addr;
         uint amount;
     }
 
     // Have a list of organisations
-    mapping(bytes32 => Organisation) private organisations; //storing organisations and their addresses
-    bytes32[] private organisationIds; //Store organisations id
-
-    bytes32[] private donorsId; //Store donors id
-    mapping(bytes32 => Donors) private donors; //storing donors and their addresses and organisation donated to
+    Organisation[] public organisations;
+    mapping(address => Donors[]) organisationsToDonors;
 
     // Not needed for mainnet
 
@@ -53,105 +45,86 @@ contract Donate {
     event DonationSuccess(address receiver, uint256 amount);
 
     // Add organisation
-    function addOrganisation(string memory _name, address _address)
-        public
-        returns (bool success)
-    {
-        require(
-            bytes(_name).length > 0,
-            "The organisations's name cannot be empty!"
-        );
+        function createOrganisation(
+        string memory _name,
+        uint amount
+    ) public {
+        require(bytes(_name).length > 0, "Organization name cannot be empty");
+        require(amount > 0, "Amount must be greater than 0");
 
-        bytes32 blockHash = blockhash(block.number - 1);
-        bytes32 id = keccak256(
-            abi.encodePacked(msg.sender, _name, block.timestamp, blockHash)
-        );
+        Organisation memory newOrganisation = Organisation({
+            addr: msg.sender,
+            name: _name,
+            amount: 0
+        });
 
-        organisations[id] = Organisation({id: id, name: _name, addr: _address});
-        organisationIds.push(id);
-
-        return true;
+        organisations.push(newOrganisation);
     }
 
     // Add donor
-    function addDonor(string memory _name, address _address)
-        internal
-        returns (bool)
-    {
+    function makeDonation(uint organisationIndex) public payable {
+        require(msg.value > 0, "Donation amount must be greater than 0");
         require(
-            bytes(_name).length > 0,
-            "The donor's name cannot be empty!"
+            organisationIndex < organisations.length,
+            "Invalid organization index"
         );
 
-        bytes32 blockHash = blockhash(block.number - 1);
-        bytes32 id = keccak256(
-            abi.encodePacked(msg.sender, _name, block.timestamp, blockHash)
-        );
+        Organisation storage org = organisations[organisationIndex];
 
-        organisations[id] = Organisation({id: id, name: _name, addr: _address});
-        organisationIds.push(id);
-        return true;
+        org.amount += msg.value;
+        Donors memory newDonor = Donors(
+            msg.sender,
+            msg.value
+        );
+        require(
+            address(this).balance - org.amount > 0,
+            "Company has no donation"
+        );  
+        organisationsToDonors[org.addr].push(newDonor);
+        emit DonationSuccess(msg.sender, msg.value);
     }
 
-     // Add donor
-    function logWithdrawal(string memory _name, address _address)
-        internal
-        returns (bool)
-    {
-        require(
-            bytes(_name).length > 0,
-            "The donor's name cannot be empty!"
-        );
-
-        bytes32 blockHash = blockhash(block.number - 1);
-        bytes32 id = keccak256(
-            abi.encodePacked(msg.sender, _name, block.timestamp, blockHash)
-        );
-
-        organisations[id] = Organisation({id: id, name: _name, addr: _address});
-        organisationIds.push(id);
-        return true;
-    }
 
     // Get organisations address
-    function getOrganisationAddress(bytes32 _id)
-        public
-        view
-        returns (address organisationAddress)
-    {
-        // check if organisation exists
-        return organisations[_id].addr;
+     function getOrganiationsAddress(
+        uint organisationIndex
+    ) public view returns (address OrganisationAddress) {
+        return organisations[organisationIndex].addr;
     }
 
-    // Get organisations name
-    function getOrganisationName(bytes32 _id)
-        public
-        view
-        returns (string memory organisationName)
-    {
-        return organisations[_id].name;
+     function getOrganization(
+        uint index
+    ) public view returns (Organisation memory) {
+        require(index < organisations.length, "Invalid index");
+        Organisation memory org = organisations[index];
+        return (org);
     }
-
-    // Get the id of all organisations
-    function getOrganisationsIds() public view returns (bytes32[] memory ids) {
-        return organisationIds;
-    }
-
-    //Make the donation to the organisation
-    function makeDonation(address payable addr,string memory _name, uint256 amount) public payable {
-        addr.transfer(amount); // transfer command ( not sure it currently works though)
-        addDonor(_name, msg.sender);
-        emit DonationSuccess(addr, amount);
+     // Get all organisations
+    function getAllOrganizations() public view returns (Organisation[] memory) {
+        return organisations;
     }
 
     // Track the status of the donation
     function trackTokens() public {}
 
     // Withdraw token from organisations account
-    function withdrawTokens(address _to, uint amount) public returns(bool) {
+    function withdrawTokens(uint organisationIndex, uint amountToWithdraw) public {
+    require(
+        organisationIndex < organisations.length,
+        "Invalid organization index"
+    );
 
+    Organisation storage org = organisations[organisationIndex];
+    require(
+        org.addr == msg.sender,
+        "Only the organization creator can withdraw tokens"
+    );
 
-    }
+    payable(org.addr).transfer(amountToWithdraw);
+
+    // Emit an event to indicate Ether has been withdrawn
+    emit WithdrawalMade(org.addr, amountToWithdraw);
+}
 
     // View list of received token
     function receivedTokens() public {}

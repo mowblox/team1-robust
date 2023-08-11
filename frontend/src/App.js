@@ -6,6 +6,7 @@ import {
 } from 'react-icons/fa'
 // import {} from ''
 import {ToastContainer} from 'react-toastify'
+import Chat from 'react-simple-chatbot'
 import Home from './pages/Home';
 import About from './pages/About';
 import Contact from './pages/Contact';
