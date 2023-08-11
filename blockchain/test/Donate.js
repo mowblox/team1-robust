@@ -18,16 +18,30 @@ describe("Donate", function () {
 
   it("Get number of organisations", async function () {
     const { donate } = await loadFixture(deployDonateFixture);
-    await donate.getOrganisationLength();
+    expect(await donate.getOrganisationLength()).to.equal(4);
+    console.log(await donate.getOrganisationLength());
   });
 
   it("View name of organisation", async function () {
     const { donate } = await loadFixture(deployDonateFixture);
-    await donate.viewOrganisation(0);
+    expect(await donate.viewOrganisation(0)).be.equal.toString();
+    console.log(await donate.viewOrganisation(0));
   });
 
   it("Get organisations address", async function () {
     const { donate } = await loadFixture(deployDonateFixture);
-    await donate.getOrganisationAddress(0);
+    // expect(await donate.viewOrganisation(0))
+    console.log(await donate.getOrganisationAddress(0));
+  });
+
+  it("Make donation to an organisation", async function () {
+    const { donate } = await loadFixture(deployDonateFixture);
+    // expect(await donate.viewOrganisation(0))
+    console.log(
+      await donate.makeDonation(
+        0xbf85887b87d3f90bf535c225f9c24c62a211fb29,
+        0.0001
+      )
+    );
   });
 });
