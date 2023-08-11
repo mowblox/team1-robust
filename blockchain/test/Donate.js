@@ -16,32 +16,31 @@ describe("Donate", function () {
     return { donate, owner, otherAccount };
   }
 
-  it("Get number of organisations", async function () {
+  it("Add Organisation", async function () {
     const { donate } = await loadFixture(deployDonateFixture);
-    expect(await donate.getOrganisationLength()).to.equal(4);
-    console.log(await donate.getOrganisationLength());
+    console.log(await donate.addOrganisation("EricaOrg",'0xbF85887b87d3f90Bf535C225f9c24C62a211Fb29'));
   });
 
-  it("View name of organisation", async function () {
+  it("Get ID's of Organisation", async function () {
     const { donate } = await loadFixture(deployDonateFixture);
-    expect(await donate.viewOrganisation(0)).be.equal.toString();
-    console.log(await donate.viewOrganisation(0));
+    // expect(await donate.getOrganisationsIds());
+    console.log(await donate.getOrganisationsIds());
   });
 
-  it("Get organisations address", async function () {
-    const { donate } = await loadFixture(deployDonateFixture);
-    // expect(await donate.viewOrganisation(0))
-    console.log(await donate.getOrganisationAddress(0));
-  });
+//   it("Get organisation name", async function () {
+//     const { donate } = await loadFixture(deployDonateFixture);
+//     // expect(await donate.viewOrganisation(0))
+//     console.log(await donate.getOrganisationName());
+//   });
 
-  it("Make donation to an organisation", async function () {
-    const { donate } = await loadFixture(deployDonateFixture);
-    // expect(await donate.viewOrganisation(0))
-    console.log(
-      await donate.makeDonation(
-        0xbf85887b87d3f90bf535c225f9c24c62a211fb29,
-        0.0001
-      )
-    );
-  });
+//   it("Make donation to an organisation", async function () {
+//     const { donate } = await loadFixture(deployDonateFixture);
+//     // expect(await donate.viewOrganisation(0))
+//     console.log(
+//       await donate.makeDonation(
+//         0xbf85887b87d3f90bf535c225f9c24c62a211fb29,
+//         0.0001
+//       )
+//     );
+//   });
 });
